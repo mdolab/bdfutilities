@@ -60,7 +60,7 @@ class BDFUtils(object):
 
         # Perform the rotation
         for node in self.model.nodes.values():
-            node.xyz = np.dot(node.xyz, rotMat)
+            node.xyz = np.dot(rotMat, node.xyz)
 
     def translate(self, dx, dy, dz):
         """
