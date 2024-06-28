@@ -1,4 +1,5 @@
 # Standard Python modules
+import sys
 import argparse
 import os
 import shutil
@@ -37,14 +38,12 @@ def get_parser():
 
 
 class BDFUtils(object):
-    """This class wraps common"""
+    """This class wraps operations to modify BDF content"""
 
     def __init__(self, model):
-
         self.model = model
 
     def rotate(self, vx, vy, vz, theta):
-
         """
         Rotate the grid around an axis that passes through the origin.
 
@@ -82,23 +81,21 @@ class BDFUtils(object):
         """
 
         nNodes = len(self.model.nodes)
-        coords = np.zeros((nNodes,3))
+        coords = np.zeros((nNodes, 3))
         for i, node in enumerate(self.model.nodes.values()):
             coords[i, :] = node.xyz
         return coords
 
-
     def setGridCoords(self, coords):
         """
-        Returns an array with all GRID coordinates
+        Sets GRID coordinates in BDF file
 
         Parameters
         coords : ndarray
             Grid coordinates that are to be set in the BDF
         """
         for i, node in enumerate(self.model.nodes.values()):
-            node.xyz = coords[i,:]
-
+            node.xyz = coords[i, :]
 
     def writeBDF(self, bdfFile):
         self.model.write_bdf(bdfFile)
@@ -126,23 +123,25 @@ def main():
     elif args.mode == "translate":
         bdfUtil.translate(args.dx, args.dy, args.dz)
 
-    # Check if we have an outFile argument, if not this option does not write out anything
-    try:
-        if args.outFile is None:
-            # Determine where to put a file:
-            dirpath = tempfile.mkdtemp()
+    # Check upfront if we are writing an output, if not just exit
+    if "outFile" not in args:
+        sys.exit(0)
 
-            # Define a temp output file
-            outFileName = os.path.join(dirpath, "tmp.bdf")
-        else:
-            outFileName = args.outFile
-    except Exception:
-        outFile = None
+    # We have an outFile argument present but it may not be set by the user
+    # This means we are overwriting the input file
+    if args.outFile is None:
+        # Determine where to put a file
+        dirpath = tempfile.mkdtemp()
+
+        # Define a temp output file
+        outFileName = os.path.join(dirpath, "tmp.bdf")
+    else:
+        outFileName = args.outFile
 
     # Write the final grid
     bdfUtil.writeBDF(outFileName)
 
-    # Possibly copy back to the original:
+    # Possibly copy back to the original
     if args.outFile is None:
-        shutil.copyfile(outFileName, args.gridFile)
+        shutil.copyfile(outFileName, args.bdfFile)
         shutil.rmtree(dirpath)

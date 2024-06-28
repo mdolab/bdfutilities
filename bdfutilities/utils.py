@@ -3,7 +3,6 @@ import numpy as np
 
 
 def rotationMatrix(vx, vy, vz, theta):
-
     """
     Rotate the grid around an axis that passes through the origin.
 
