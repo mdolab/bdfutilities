@@ -48,7 +48,7 @@ class BDFUtils(object):
         """
         Rotate the grid around an axis that passes through the origin.
 
-        parameters
+        Parameters
         ----------
         vx, vy, vz : float
             components of the rotation vector
@@ -66,15 +66,39 @@ class BDFUtils(object):
         """
         Translates the geometry
 
-        parameters
+        Parameters
         ----------
         dx, dy, dz : float
             components of the translation vector
         """
 
-        # Perform the rotation
+        # Perform the translation
         for node in self.model.nodes.values():
             node.xyz += np.array([dx, dy, dz])
+
+    def getGridCoords(self):
+        """
+        Returns an array with all GRID coordinates
+        """
+
+        nNodes = len(self.model.nodes)
+        coords = np.zeros((nNodes,3))
+        for i, node in enumerate(self.model.nodes.values()):
+            coords[i, :] = node.xyz
+        return coords
+
+
+    def setGridCoords(self, coords):
+        """
+        Returns an array with all GRID coordinates
+
+        Parameters
+        coords : ndarray
+            Grid coordinates that are to be set in the BDF
+        """
+        for i, node in enumerate(self.model.nodes.values()):
+            node.xyz = coords[i,:]
+
 
     def writeBDF(self, bdfFile):
         self.model.write_bdf(bdfFile)
@@ -83,7 +107,7 @@ class BDFUtils(object):
 def readBDF(bdfFile, validate=False, xref=False):
     # Disable cross-referencing unless we actually need it,
     # Read the BDF object and return for usage
-    model = BDF(debug=True)
+    model = BDF(debug=False)
     model.read_bdf(bdfFile, validate=validate, xref=xref)
 
     return model
