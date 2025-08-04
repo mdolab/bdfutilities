@@ -34,6 +34,11 @@ def get_parser():
     p_t.add_argument("dz", help="z-displacement", type=float)
     p_t.add_argument("outFile", nargs="?", default=None, help="Optional output file")
 
+    p_sc = subparsers.add_parser("scale", help="Scale a grid.")
+    p_sc.add_argument("bdfFile", help="Name of input BDF file")
+    p_sc.add_argument("scaleFact", help="scale factor", type=float)
+    p_sc.add_argument("outFile", nargs="?", default=None, help="Optional output file")
+
     return parser
 
 
@@ -74,6 +79,18 @@ class BDFUtils(object):
         # Perform the translation
         for node in self.model.nodes.values():
             node.xyz += np.array([dx, dy, dz])
+
+    def scale(self, scaleFact):
+        """
+        Scale the geometry
+
+        Parameters
+        ----------
+        scaleFact : float
+            scaling factor
+        """
+        for node in self.model.nodes.values():
+            node.xyz *= scaleFact
 
     def getGridCoords(self):
         """
@@ -122,6 +139,12 @@ def main():
 
     elif args.mode == "translate":
         bdfUtil.translate(args.dx, args.dy, args.dz)
+
+    elif args.mode == "scale":
+        bdfUtil.scale(args.scaleFact)
+
+    else:
+        print(f"Unknown operation requested: {args.mode}")
 
     # Check upfront if we are writing an output, if not just exit
     if "outFile" not in args:
