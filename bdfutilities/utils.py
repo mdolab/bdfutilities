@@ -6,14 +6,14 @@ def rotationMatrix(vx, vy, vz, theta):
     """
     Rotate the grid around an axis that passes through the origin.
 
-    parameters
+    Parameters
     ----------
     vx, vy, vz : float
         components of the rotation vector
     theta : float
         rotation angle, in degrees
 
-    returns
+    Returns
     -------
     rotMat : ndarray
         the rotation matrix
