@@ -108,6 +108,7 @@ class BDFUtils(object):
         Sets GRID coordinates in BDF file
 
         Parameters
+        ----------
         coords : ndarray
             Grid coordinates that are to be set in the BDF
         """

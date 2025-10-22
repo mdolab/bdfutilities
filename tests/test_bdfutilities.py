@@ -2,9 +2,10 @@ import os
 import unittest
 import subprocess
 from parameterized import parameterized
-from bdfutilities.bdf_utils import BDFUtils, readBDF
 
 baseDir = os.path.dirname(os.path.abspath(__file__))
+
+
 class TestExamples(unittest.TestCase):
     # Get all example scripts in the example folder and its subfolders
     exampleDir = os.path.abspath(os.path.join(baseDir, "../examples"))
