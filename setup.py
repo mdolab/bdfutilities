@@ -10,7 +10,7 @@ setup(
     keywords="BDF",
     author="",
     author_email="",
-    url="https://github.com/eirikurj/bdfutilities",
+    url="https://github.com/mdolab/bdfutilities",
     license="Apache 2.0",
     packages=["bdfutilities"],
     package_data={"bdfutilities": ["*.so"]},
