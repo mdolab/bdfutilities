@@ -115,14 +115,14 @@ class BDFUtils(object):
             node.xyz = coords[i, :]
 
     def writeBDF(self, bdfFile):
-        self.model.write_bdf(bdfFile)
+        self.model.write_bdf(bdfFile, write_header=False, size=16)
 
 
 def readBDF(bdfFile, validate=False, xref=False):
     # Disable cross-referencing unless we actually need it,
     # Read the BDF object and return for usage
     model = BDF(debug=False)
-    model.read_bdf(bdfFile, validate=validate, xref=xref)
+    model.read_bdf(bdfFile, validate=validate, xref=xref, save_file_structure=True)
 
     return model
 
